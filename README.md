@@ -98,7 +98,7 @@ Video: **[ISI URL YouTube Unlisted / Google Drive dengan akses siapa saja yang p
 - [ ] GitHub repository **Public** bernama `pwl26-mini-project`, termasuk `prisma/migrations`, tanpa `.env` atau `node_modules`.
 - [ ] Dua tautan (repo dan video) dikumpulkan via Berajah, keduanya dapat diakses sampai akhir semester.
 
-Repo GitHub telah dibuat oleh mahasiswa; status unggahan kode mengikuti langkah sinkronisasi terpisah. Belum ada video atau screenshot asli yang dibuat/diklaim oleh OpenCode. Perhatikan tenggat dan kebijakan keterlambatan di halaman dosen.
+Kode telah diunggah ke repo Public [ripkiiuu/pwl26-mini-project](https://github.com/ripkiiuu/pwl26-mini-project) pada branch `main`; `.env` dan `node_modules` tidak ikut. Belum ada video atau screenshot asli yang dibuat/diklaim oleh OpenCode. Di lingkungan saat pemeriksaan ini tersedia **Adminer**, tetapi phpMyAdmin dan Postman belum terdeteksi; siapkan keduanya bila diperlukan untuk bukti/video sesuai instruksi dosen. Perhatikan tenggat dan kebijakan keterlambatan di halaman dosen.
 
 ### Deklarasi penggunaan AI
 
