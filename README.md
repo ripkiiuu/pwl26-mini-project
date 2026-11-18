@@ -68,37 +68,38 @@ Joi memeriksa **bentuk** input (required, string kosong, tipe, rentang, ID, hala
 
 `npm test` menguji validasi/error dan **integrasi MySQL** jika `.env` tersedia; tanpa `DATABASE_URL`, tes integrasi dilewati. Tes integrasi membuat data ber-SKU unik lalu membersihkan **hanya data buatannya**, tidak menghapus seed/order demo. Jalankan `requests.http` atau impor [`postman/Bouquet-Products-ETS.postman_collection.json`](postman/Bouquet-Products-ETS.postman_collection.json) ke Postman; cek status dan perubahan pada phpMyAdmin. Sesuaikan `productId` dan SKU agar PUT/DELETE pada produk demo yang benar dan **tanpa order**. Uji rollback khusus: `node scripts/verify-rollback.js 1` setelah seed (ganti id jika perlu). Skrip ini sengaja melempar error setelah INSERT dalam transaksi dan memverifikasi jumlah order/stok tetap; **bukan endpoint debug**. Uji 500 terkontrol ada pada `npm test` memakai aplikasi mini terpisah, tidak menambahkan jalur debug pada server final.
 
-Ambil **screenshot asli** sendiri dengan nama berikut. Semua screenshot Postman sebaiknya memperlihatkan request SKU/nama/NIM atau request/query yang mengarah ke data demo beridentitas; untuk phpMyAdmin tampilkan baris SKU `BKT-F1D02410080-001` dan order demo. Jangan mengedit status HTTP pada gambar. Folder awal hanya berisi `.gitkeep`, **belum ada bukti screenshot**.
+**13 screenshot asli** hasil pengujian Postman dan phpMyAdmin disimpan di folder [`screenshot/`](screenshot/). Gambar Postman memperlihatkan request, status dan data demo beridentitas; gambar phpMyAdmin memperlihatkan SKU `BKT-F1D02410080-001`, stok setelah order, dan order ber-NIM. Tidak ada status HTTP yang diedit.
 
 | File di `screenshot/` | Bukti yang ditampilkan |
 |---|---|
-| `01-get-products-200.png` | daftar produk dan identitas di data |
-| `02-get-products-pagination-filter-200.png` | query halaman/ukuran/category dan meta |
-| `03-post-product-201.png` | body POST beridentitas dan status 201 |
-| `04-post-validation-error.png` | body invalid, status 400 |
-| `05-post-duplicate-sku-409.png` | SKU beridentitas dikirim ulang, status 409 |
-| `06-get-product-not-found-404.png` | ID tak ada dan status 404; sertakan konteks identitas di koleksi/request |
-| `07-put-product-200.png` | PUT produk demo, status 200 |
-| `08-delete-product-204.png` | DELETE produk demo tanpa order, status 204 |
-| `09-get-orders-include-200.png` | order demo dan objek product |
-| `10-post-order-transaction-201.png` | order demo, status 201, stok sesudah |
-| `11-order-stock-conflict-409.png` | quantity terlalu besar, status 409 |
-| `12-phpmyadmin-products-orders.png` | dua tabel asli dan identitas SKU/order |
+| [`01-get-products-200.png`](screenshot/01-get-products-200.png) | daftar produk dan identitas di data |
+| [`02-get-products-pagination-filter-200.png`](screenshot/02-get-products-pagination-filter-200.png) | query halaman/ukuran/category/cari dan meta |
+| [`03-post-product-201.png`](screenshot/03-post-product-201.png) | body POST beridentitas dan status 201 |
+| [`04-post-validation-error.png`](screenshot/04-post-validation-error.png) | harga negatif ditolak Joi, status 400 |
+| [`05-post-duplicate-sku-409.png`](screenshot/05-post-duplicate-sku-409.png) | SKU beridentitas dikirim ulang, status 409 |
+| [`06-get-product-not-found-404.png`](screenshot/06-get-product-not-found-404.png) | ID tak ada dan status 404 |
+| [`07-put-product-200.png`](screenshot/07-put-product-200.png) | PUT produk demo ID 19, status 200 |
+| [`08-delete-product-204.png`](screenshot/08-delete-product-204.png) | DELETE produk demo ID 19 tanpa order, status 204 tanpa body |
+| [`09-get-orders-include-200.png`](screenshot/09-get-orders-include-200.png) | order demo dan objek product terkait |
+| [`10-post-order-transaction-201.png`](screenshot/10-post-order-transaction-201.png) | order ID 5 dibuat, totalPrice 350000, status 201 |
+| [`11-order-stock-conflict-409.png`](screenshot/11-order-stock-conflict-409.png) | quantity 999999 ditolak, status 409 |
+| [`12a-phpmyadmin-products.png`](screenshot/12a-phpmyadmin-products.png) | tabel products, SKU ber-NIM dan stok 8 sesudah order |
+| [`12b-phpmyadmin-orders.png`](screenshot/12b-phpmyadmin-orders.png) | tabel orders, dua order demo termasuk ID 5 ber-NIM |
 
-**Status verifikasi teknis lokal oleh OpenCode:** MySQL Laragon 8.4.3, migrasi diterapkan dan status sinkron, seed dua kali menghasilkan **12 SKU** tanpa duplikasi, **8 tes lulus** (7 validasi/error termasuk POST tanpa JSON, 1 integrasi CRUD/filter/order/relasi/dua pesanan bersamaan). POST tanpa body yang semula menimbulkan 500 sudah diperbaiki menjadi 400 dan diuji. Dua order untuk satu stok menghasilkan tepat **201 dan 409**, stok akhirnya 0; tes membersihkan data sementara. Skrip rollback lulus: order **0 → 0**, stok **12 → 12**. Satu order demo beridentitas `Pelanggan Demo F1D02410080` sengaja disimpan pada produk seed id 1: total `350000`, stok **12 → 10** untuk pembuktian manual. Ini **bukan** klaim bahwa mahasiswa telah menguji seluruh skenario di Postman atau memeriksa phpMyAdmin; screenshot dan video masih menunggu. `npm audit` melaporkan empat advisory high pada dependensi transitif Prisma CLI 6 (`@prisma/config`, `effect`, `deepmerge-ts`); Joi sudah dinaikkan ke 17.13.9. Jangan `npm audit fix --force` karena akan memindahkan Prisma ke major lain dan perlu perubahan konfigurasi/client. Tinjau pembaruan versi dan advisories sebelum deployment; proyek ini untuk lokal akademik.
+**Status verifikasi teknis lokal oleh OpenCode:** MySQL Laragon 8.4.3, migrasi diterapkan dan status sinkron, seed dua kali menghasilkan **12 SKU** tanpa duplikasi, **8 tes lulus** (7 validasi/error termasuk POST tanpa JSON, 1 integrasi CRUD/filter/order/relasi/dua pesanan bersamaan). POST tanpa body yang semula menimbulkan 500 sudah diperbaiki menjadi 400 dan diuji. Dua order untuk satu stok menghasilkan tepat **201 dan 409**, stok akhirnya 0; tes membersihkan data sementara. Skrip rollback lulus: order **0 → 0**, stok **12 → 12**. Satu order demo beridentitas `Pelanggan Demo F1D02410080` sengaja disimpan pada produk seed id 1: total `350000`, stok **12 → 10**. Mahasiswa kemudian menguji endpoint di Postman dan memeriksa phpMyAdmin: order screenshot ID 5 total `350000`, stok produk ID 1 **10 → 8**, serta kegagalan stok 409. Bukti asli ada di tabel screenshot di atas; **video belum direkam/ditautkan**. `npm audit` melaporkan empat advisory high pada dependensi transitif Prisma CLI 6 (`@prisma/config`, `effect`, `deepmerge-ts`); Joi sudah dinaikkan ke 17.13.9. Jangan `npm audit fix --force` karena akan memindahkan Prisma ke major lain dan perlu perubahan konfigurasi/client. Tinjau pembaruan versi dan advisories sebelum deployment; proyek ini untuk lokal akademik.
 
 ## Video dan pengumpulan
 
 Video: **[ISI URL YouTube Unlisted / Google Drive dengan akses siapa saja yang punya tautan setelah merekam]**. Panduan: [`docs/PANDUAN_LIVE_CODING_POST.md`](docs/PANDUAN_LIVE_CODING_POST.md) dan [`docs/SCRIPT_VIDEO_ETS.md`](docs/SCRIPT_VIDEO_ETS.md).
 
 - [x] MySQL tugas lokal berjalan; migrasi, seed dua kali, tes API otomatis dan rollback dijalankan OpenCode.
-- [ ] Mahasiswa menjalankan sendiri tes Postman dan memeriksa tabel di phpMyAdmin untuk memahami hasilnya.
-- [ ] Screenshot asli beridentitas masuk `screenshot/` dan diperiksa di GitHub.
+- [x] Mahasiswa menjalankan tes Postman dan memeriksa tabel di phpMyAdmin; hasilnya disimpan sebagai screenshot asli.
+- [x] Screenshot asli beridentitas masuk `screenshot/` dan diperiksa di GitHub.
 - [ ] Video satu rekaman ≤15 menit dengan suara sendiri, live coding POST lengkap, Postman, phpMyAdmin, error sengaja dan pemulihan; tautannya di README.
-- [ ] GitHub repository **Public** bernama `pwl26-mini-project`, termasuk `prisma/migrations`, tanpa `.env` atau `node_modules`.
+- [x] GitHub repository **Public** bernama `pwl26-mini-project`, termasuk `prisma/migrations`, tanpa `.env` atau `node_modules`.
 - [ ] Dua tautan (repo dan video) dikumpulkan via Berajah, keduanya dapat diakses sampai akhir semester.
 
-Kode telah diunggah ke repo Public [ripkiiuu/pwl26-mini-project](https://github.com/ripkiiuu/pwl26-mini-project) pada branch `main`; `.env` dan `node_modules` tidak ikut. Belum ada video atau screenshot asli yang dibuat/diklaim oleh OpenCode. Di lingkungan saat pemeriksaan ini tersedia **Adminer**, tetapi phpMyAdmin dan Postman belum terdeteksi; siapkan keduanya bila diperlukan untuk bukti/video sesuai instruksi dosen. Perhatikan tenggat dan kebijakan keterlambatan di halaman dosen.
+Kode dan screenshot asli mahasiswa diunggah ke repo Public [ripkiiuu/pwl26-mini-project](https://github.com/ripkiiuu/pwl26-mini-project) pada branch `main`; `.env` dan `node_modules` tidak ikut. Postman dan phpMyAdmin sudah dipakai mahasiswa untuk bukti di atas. **Video masih harus direkam sendiri**. Perhatikan tenggat dan kebijakan keterlambatan di halaman dosen.
 
 ### Deklarasi penggunaan AI
 
