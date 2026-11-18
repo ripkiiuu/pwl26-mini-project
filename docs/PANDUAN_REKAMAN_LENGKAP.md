@@ -4,14 +4,14 @@
 
 ## 0. Persiapan sebelum menekan Record
 
-1. Pastikan `main` bersih (`git status --short` tidak mengeluarkan apa-apa) dan kode/screenshot final sudah aman di GitHub. Jangan mengubah atau menghapus screenshot.
-2. Pastikan Laragon MySQL dan Apache berjalan, Postman serta phpMyAdmin dapat dibuka, `npm test` lulus, dan kamera/mikrofon siap. Jangan memulai dengan server lama yang masih menjalankan kode sebelum latihan; hentikan server lama, lalu start ulang **setelah** fungsi selesai ditulis.
-3. Buat branch lokal khusus latihan: `git switch -c latihan-video-post`. Jika nama itu sudah ada, gunakan nama lain. **Jangan lakukan persiapan ini pada `main`.**
-4. Pada branch latihan saja, hapus manual **hanya** definisi `const kolom` dan `export const productBody` di validator, fungsi `simpan(input)` di data, fungsi `buat(input)` di service, fungsi `buat(req,res)` di controller, dan **satu baris** `router.post(...)` di routes. Simpan file. Biarkan import, GET/PUT/DELETE, dan file lain utuh. Selama validator belum diketik ulang, PUT yang memakai `productBody` juga belum siap—wajar untuk keadaan awal latihan; **jangan jalankan server** sampai semuanya dipulihkan. Jangan memakai `git reset --hard`/menghapus seluruh file.
+1. Pastikan kode/screenshot final pada `main` sudah aman di GitHub. Jangan mengubah atau menghapus screenshot.
+2. Pastikan Laragon MySQL dan Apache berjalan, Postman serta phpMyAdmin dapat dibuka, dan kamera/mikrofon siap. `npm test` lulus pada `main`; pada branch latihan tes POST **memang gagal** sampai Anda mengetik ulang. Server lama sudah dihentikan; jangan memakai server yang masih memuat kode lama di memori.
+3. **Pada komputer ini branch lokal `latihan-video-post` sudah disiapkan.** Ketik `git branch --show-current`; jika belum berada di sana, gunakan `git switch latihan-video-post`. Jangan membuat ulang branch bernama sama dan jangan melakukan latihan pada `main`. Branch latihan belum di-push.
+4. **Lima bagian POST sudah dikosongkan pada branch latihan**: Joi `productBody` saat ini adalah ekspor sementara `Joi.object({})` agar modul tetap bisa dimuat; fungsi `simpan`, service `buat`, controller `buat`, dan route POST diganti komentar penanda. Jangan hapus bagian GET/PUT/DELETE atau menghapus ulang seluruh file. GET masih 200, POST masih 404 sebelum diketik. Setelah ketik ulang, ganti schema sementara (jangan membuat ekspor `productBody` ganda), lalu jalankan server baru.
 5. Pastikan SKU `BKT-F1D02410080-VIDEO-01` belum ada. Jangan gunakan `SS-01` dari screenshot. Jika sudah pernah latihan menggunakan VIDEO-01, pilih nomor baru dan konsisten pada semua request video.
 6. Siapkan tab editor urut: validator → data → service → controller → routes → app → errorHandler. Buka Postman dan phpMyAdmin, tetapi **jangan** menampilkan hasil request/video yang belum Anda lakukan seolah-olah baru saja dikerjakan.
 
-> Anda boleh latihan berkali-kali **sebelum** merekam. Saat rekaman, tunjukkan keadaan awal latihan yang jujur, ketik bagian POST sendiri, jalankan server, uji request, buktikan database. Setelah rekaman, bandingkan branch latihan dengan `main` dan simpan perubahan jika diperlukan; jangan menimpa pekerjaan lain tanpa pemeriksaan.
+> Anda boleh latihan berkali-kali **sebelum** merekam. Saat rekaman, tunjukkan keadaan awal latihan yang jujur, ketik bagian POST sendiri, jalankan server, uji request, buktikan database. Setelah rekaman, bandingkan branch latihan dengan `main` dan simpan perubahan jika diperlukan; jangan menimpa pekerjaan lain tanpa pemeriksaan. Jika ingin mengulang dari titik awal, mintalah bantuan untuk mengembalikan **hanya branch latihan** setelah hasil latihan sebelumnya dicadangkan.
 
 ## 1. Pembukaan dan konsep (ucapkan dengan kata Anda sendiri)
 
