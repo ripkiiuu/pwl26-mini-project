@@ -21,7 +21,7 @@ src/
   middleware/{logger,validate,errorHandler}.js
   lib/prisma.js, utils/AppError.js
 prisma/schema.prisma, prisma/migrations/, prisma/seed.js
-test/, scripts/, docs/, requests.http, screenshot/
+requests.http, screenshot/
 ```
 
 Relasi: `products.id (1) ─── (N) orders.productId` (foreign key, `ON DELETE RESTRICT`). Produk memiliki SKU unik, harga `DECIMAL(12,2)`, stok integer, `createdAt`/`updatedAt`; order menyimpan harga total saat transaksi dibuat, sehingga riwayat tidak berubah bila harga produk kelak berubah.
@@ -66,7 +66,7 @@ Joi memeriksa **bentuk** input (required, string kosong, tipe, rentang, ID, hala
 
 ## Pengujian dan screenshot
 
-`npm test` menguji validasi/error dan **integrasi MySQL** jika `.env` tersedia; tanpa `DATABASE_URL`, tes integrasi dilewati. Tes integrasi membuat data ber-SKU unik lalu membersihkan **hanya data buatannya**, tidak menghapus seed/order demo. Jalankan `requests.http` atau impor [`postman/Bouquet-Products-ETS.postman_collection.json`](postman/Bouquet-Products-ETS.postman_collection.json) ke Postman; cek status dan perubahan pada phpMyAdmin. Sesuaikan `productId` dan SKU agar PUT/DELETE pada produk demo yang benar dan **tanpa order**. Uji rollback khusus: `node scripts/verify-rollback.js 1` setelah seed (ganti id jika perlu). Skrip ini sengaja melempar error setelah INSERT dalam transaksi dan memverifikasi jumlah order/stok tetap; **bukan endpoint debug**. Uji 500 terkontrol ada pada `npm test` memakai aplikasi mini terpisah, tidak menambahkan jalur debug pada server final.
+Jalankan skenario dalam `requests.http` lewat REST Client atau Postman. Gunakan SKU baru untuk POST 201, ulangi SKU yang sama untuk 409, kirim harga negatif untuk 400, dan cek ID tidak ada untuk 404. Untuk order, bandingkan jumlah baris dan stok di phpMyAdmin sebelum/sesudah POST berhasil serta setelah 409 stok tidak cukup. Pilih produk **tanpa order** untuk uji DELETE 204; foreign key menolak penghapusan produk yang sudah punya order.
 
 **13 screenshot asli** hasil pengujian Postman dan phpMyAdmin disimpan di folder [`screenshot/`](screenshot/). Gambar Postman memperlihatkan request, status dan data demo beridentitas; gambar phpMyAdmin memperlihatkan SKU `BKT-F1D02410080-001`, stok setelah order, dan order ber-NIM. Tidak ada status HTTP yang diedit.
 
@@ -86,17 +86,17 @@ Joi memeriksa **bentuk** input (required, string kosong, tipe, rentang, ID, hala
 | [`12a-phpmyadmin-products.png`](screenshot/12a-phpmyadmin-products.png) | tabel products, SKU ber-NIM dan stok 8 sesudah order |
 | [`12b-phpmyadmin-orders.png`](screenshot/12b-phpmyadmin-orders.png) | tabel orders, dua order demo termasuk ID 5 ber-NIM |
 
-**Status verifikasi teknis lokal oleh OpenCode:** MySQL Laragon 8.4.3, migrasi diterapkan dan status sinkron, seed dua kali menghasilkan **12 SKU** tanpa duplikasi, **8 tes lulus** (7 validasi/error termasuk POST tanpa JSON, 1 integrasi CRUD/filter/order/relasi/dua pesanan bersamaan). POST tanpa body yang semula menimbulkan 500 sudah diperbaiki menjadi 400 dan diuji. Dua order untuk satu stok menghasilkan tepat **201 dan 409**, stok akhirnya 0; tes membersihkan data sementara. Skrip rollback lulus: order **0 → 0**, stok **12 → 12**. Satu order demo beridentitas `Pelanggan Demo F1D02410080` sengaja disimpan pada produk seed id 1: total `350000`, stok **12 → 10**. Mahasiswa kemudian menguji endpoint di Postman dan memeriksa phpMyAdmin: order screenshot ID 5 total `350000`, stok produk ID 1 **10 → 8**, serta kegagalan stok 409. Bukti asli ada di tabel screenshot di atas. Video telah diunggah oleh mahasiswa; tautannya di bawah. OpenCode belum memverifikasi isi, suara, dan durasi video. `npm audit` melaporkan empat advisory high pada dependensi transitif Prisma CLI 6 (`@prisma/config`, `effect`, `deepmerge-ts`); Joi sudah dinaikkan ke 17.13.9. Jangan `npm audit fix --force` karena akan memindahkan Prisma ke major lain dan perlu perubahan konfigurasi/client. Tinjau pembaruan versi dan advisories sebelum deployment; proyek ini untuk lokal akademik.
+**Hasil pengujian lokal:** migrasi MySQL berhasil, seed diulang dua kali tanpa duplikasi (12 produk). Postman dan phpMyAdmin membuktikan POST produk 201, validasi 400, SKU duplikat 409, detail tidak ada 404, PUT 200, DELETE 204, serta order 201 dan stok tidak cukup 409. Pada screenshot, order ID 5 berjumlah 2 dengan total 350000 dan stok produk ID 1 turun dari 10 menjadi 8. Kode transaksi juga diuji dengan dua request order bersamaan: satu berhasil dan satu ditolak, tanpa stok negatif. Video diunggah mahasiswa; suara, durasi, dan isi akhir perlu diperiksa sendiri sebelum pengumpulan. **Catatan dependensi:** `npm audit` pernah melaporkan empat advisory high pada dependensi transitif Prisma CLI 6; jangan jalankan pembaruan major otomatis tanpa menyesuaikan konfigurasi Prisma.
 
 ## Video dan pengumpulan
 
-Video presentasi mahasiswa: **[Live Coding ETS — YouTube](https://youtu.be/cFsAMzIipPo)**. Panduan: [PDF siap baca/print](docs/PANDUAN_REKAMAN_LIVE_CODING_POST.pdf), [`docs/PANDUAN_REKAMAN_LENGKAP.md`](docs/PANDUAN_REKAMAN_LENGKAP.md), [`docs/PANDUAN_LIVE_CODING_POST.md`](docs/PANDUAN_LIVE_CODING_POST.md), dan [`docs/SCRIPT_VIDEO_ETS.md`](docs/SCRIPT_VIDEO_ETS.md). Branch lokal `latihan-video-post` adalah tempat latihan; **branch itu tidak diunggah**.
+Video presentasi mahasiswa: **[Live Coding ETS — YouTube](https://youtu.be/cFsAMzIipPo)**. Untuk NIM berakhiran 0, fungsi live coding adalah `POST /products` (route → validasi → controller → service → data). Transaksi `POST /orders` merupakan fitur proyek, bukan fungsi yang harus ditulis ulang di video.
 
-- [x] MySQL tugas lokal berjalan; migrasi, seed dua kali, tes API otomatis dan rollback dijalankan OpenCode.
+- [x] MySQL tugas lokal berjalan; migrasi dan seed dua kali berhasil.
 - [x] Mahasiswa menjalankan tes Postman dan memeriksa tabel di phpMyAdmin; hasilnya disimpan sebagai screenshot asli.
 - [x] Screenshot asli beridentitas masuk `screenshot/` dan diperiksa di GitHub.
 - [x] Tautan video YouTube tersedia di README.
-- [ ] Mahasiswa memeriksa ulang video: satu rekaman ≤15 menit, suara sendiri terdengar, live coding POST lengkap, Postman, phpMyAdmin, error sengaja dan pemulihan, serta akses Unlisted bagi siapa saja yang memiliki tautan.
+- [ ] Periksa ulang video: satu rekaman ≤15 menit, suara sendiri terdengar, live coding POST lengkap, Postman, phpMyAdmin, error sengaja dan pemulihan, serta akses Unlisted bagi siapa saja yang memiliki tautan.
 - [x] GitHub repository **Public** bernama `pwl26-mini-project`, termasuk `prisma/migrations`, tanpa `.env` atau `node_modules`.
 - [ ] Dua tautan (repo dan video) dikumpulkan via Berajah, keduanya dapat diakses sampai akhir semester.
 
