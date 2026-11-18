@@ -1,6 +1,6 @@
 # Rencana video ETS — maksimal 15 menit
 
-**Satu rekaman kontinu, tanpa potongan/percepatan, suara Muhammad Rifqy Habibi sendiri.** Durasi target 14:20 dengan cadangan 40 detik. Latih Postman/phpMyAdmin dan buka tab sebelumnya, tetapi pengetikan kode POST dan semua demonstrasi wajib nyata. Jangan mengaku video sudah direkam.
+**Satu rekaman kontinu, tanpa potongan/percepatan, suara Muhammad Rifqy Habibi sendiri.** Durasi target 14:20 dengan cadangan 40 detik. **NIM 0 hanya mengetik ulang POST /products, bukan POST /orders.** Relasi dan transaksi order sudah ada di proyek; cukup jelaskan kode yang ada. Demonstrasi tambahan bila sempat harus nyata. Jangan mengaku video sudah direkam.
 
 | Waktu | Segmen dan apa yang dijelaskan |
 |---|---|
@@ -10,7 +10,7 @@
 | 02:15–08:10 | **D.** Live coding ulang POST: Joi, `data.simpan`, `service.buat`, `controller.buat`, route POST; jelaskan setiap layer; restart/periksa server. Gunakan panduan live coding untuk checkpoint aman. |
 | 08:10–09:45 | **E.** POST SKU baru 201, ulang SKU sama 409, body `{}` 400; sebut perbedaan validasi dan constraint unik. |
 | 09:45–10:25 | **F.** Tunjukkan SKU/ID yang sama pada tabel `products` phpMyAdmin. |
-| 10:25–12:25 | **G.** GET daftar + filter/halaman/meta; GET detail; PUT dan DELETE pada produk **tanpa order**; GET orders `include`, POST order valid 201 dan stok berkurang, quantity terlalu besar 409 tanpa order baru. Jika waktu sempit, jelaskan bagian yang tidak sempat, jangan mengaku sudah mendemonstrasikan. |
+| 10:25–12:25 | **G.** GET daftar + filter/halaman/meta, GET orders `include`, tunjukkan kode transaksi `POST /orders` yang **sudah ada** tanpa mengetik ulang. Sebutkan GET detail, PUT, DELETE; screenshot di README berisi hasil tes nyata. Jika waktu cukup, boleh uji order tambahan, tetapi bukan live coding wajib NIM 0. |
 | 12:25–13:15 | **H.** Kesalahan sengaja: SKU duplikat tadi 409, tunjukkan perbaikan dengan SKU baru 201; atau demonstrasi kode salah lokal dan langsung pulihkan. Untuk rollback tunjukkan skrip `verify-rollback.js` jika waktu/DB memungkinkan. |
 | 13:15–14:20 | **I.** Kesimpulan pribadi: indeks unik, alur layer, transaksi/stok atomik, apa yang dipelajari; deklarasi bantuan OpenCode/AI secara jujur, jelaskan pengujian pribadi yang benar-benar sudah dilakukan. Salam penutup. |
 

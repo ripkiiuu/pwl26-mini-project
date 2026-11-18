@@ -114,14 +114,15 @@ Ucapkan: “Status 201, respons mengandung ID, SKU, harga Decimal sebagai string
 
 **phpMyAdmin:** buka `http://localhost/phpmyadmin` → database `ets_pwl_rifqy` → tabel `products` → Browse atau Search SKU VIDEO-01/VIDEO-02. Cocokkan ID, SKU, nama, harga, stok dengan respons Postman. Jangan klik Empty/Drop. Jangan tampilkan kredensial `.env` atau data usaha.
 
-## 4. Endpoint lain dan transaksi (ringkas, bukan fungsi live coding Anda)
+## 4. Fitur lain di proyek (bukan tugas mengetik ulang Anda)
 
-- `GET /products?halaman=1&ukuran=5&category=Wisuda&cari=Rifqy`: tunjukkan `data` dan `meta`; service memakai `skip`, `take`, `where`, `count`.
-- `GET /orders`: ada objek `product` karena Prisma `include`.
-- `POST /orders` pada produk yang masih punya stok, misalnya productId 2 dengan quantity 1 dan customerName `Pelanggan Video F1D02410080`: tunjukkan 201, harga diambil dari database dan stok turun. **Jangan mengirim sukses berulang tanpa sengaja.**
-- Ulang order dengan quantity 999999: 409, tidak ada order gagal yang tersimpan/stok turun.
-- Tunjukkan `src/services/order.service.js`: `prisma.$transaction(async tx => ...)`, semua query transaksi memakai `tx`. `updateMany` memakai syarat `stock >= quantity`, sehingga dua pesanan bersamaan tidak dapat membuat stok negatif. Jika satu operasi melempar error, keduanya rollback. Skrip `node scripts/verify-rollback.js 1` bisa dipakai pada latihan terpisah untuk bukti rollback eksplisit, tanpa menambah route debug.
-- Sebutkan PUT dan DELETE produk, 404 untuk ID tidak ada dan 409 jika produk memiliki order. Tidak perlu mengetik ulang endpoint itu untuk NIM 0.
+**Tegas: NIM 0 hanya mengetik ulang `POST /products`.** Dosen tetap meminta proyek mempunyai relasi dan satu transaksi yang mengubah dua tabel; `POST /orders` sudah diimplementasikan dalam kode final. Anda **tidak perlu menulis ulang route/controller/service/data order** pada video.
+
+- Tunjukkan sebentar `GET /products?halaman=1&ukuran=5&category=Wisuda&cari=Rifqy`: ada `data` dan `meta` dari `skip`, `take`, `where`, `count`.
+- Tunjukkan `GET /orders`: objek `product` muncul karena Prisma `include`. Cukup gunakan data/screenshot asli yang sudah diuji.
+- Jelaskan **tanpa mengetik** di `src/services/order.service.js`: `prisma.$transaction(async tx => ...)`, seluruh query di transaksi memakai `tx`, pengurangan stok bersyarat `stock >= quantity`, gagal berarti rollback. Ini memenuhi fitur proyek, bukan live coding khusus NIM 0.
+- Sebutkan GET detail, PUT, DELETE dan error 404/409 secara ringkas. Hasil uji API sudah ada pada screenshot di README.
+- **Jika masih ada waktu**, boleh demonstrasikan POST order 201 dan stok berkurang lalu stok kurang 409; ini tambahan bukti, **bukan syarat mengetik ulang untuk NIM 0**. Jangan mengirim order sukses berulang tanpa sengaja.
 
 ## 5. Alokasi waktu maksimal 15 menit
 
@@ -134,7 +135,7 @@ Ucapkan: “Status 201, respons mengandung ID, SKU, harga Decimal sebagai string
 | 07:50–08:20 | Start server, tangani error nyata bila ada. |
 | 08:20–10:10 | Postman 201, 409 duplikat, perbaikan input, 400 validasi. |
 | 10:10–10:55 | phpMyAdmin: SKU baru benar-benar ada. |
-| 10:55–13:15 | GET pagination/filter, GET orders, POST order 201 dan 409; jelaskan `tx` dan stok bersyarat. |
+| 10:55–13:15 | Tunjukkan GET pagination/filter, GET orders dan kode transaksi yang sudah ada; **tidak mengetik order**. Uji order tambahan hanya jika waktu cukup. |
 | 13:15–14:20 | Error sengaja yang sudah diuji dan cara memperbaikinya, kesimpulan pribadi, penggunaan AI yang jujur, salam. |
 | 14:20–15:00 | Cadangan bila aplikasi lambat; **jangan melebihi 15 menit**. |
 
