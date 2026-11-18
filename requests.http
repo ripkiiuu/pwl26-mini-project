@@ -1,0 +1,56 @@
+@base = http://localhost:3000
+@id = 1
+
+### Daftar dan filter (200)
+GET {{base}}/products?halaman=1&ukuran=5&category=Wisuda
+
+### Detail (200 / 404 jika id belum ada)
+GET {{base}}/products/{{id}}
+
+### Buat produk: jalankan sekali (201), ulangi untuk konflik SKU (409)
+POST {{base}}/products
+Content-Type: application/json
+
+{"sku":"BKT-F1D02410080-LIVE","name":"Buket Demo Muhammad Rifqy Habibi","category":"Wisuda","description":"Latihan ETS F1D02410080","price":179000,"stock":10}
+
+### Body kosong (400)
+POST {{base}}/products
+Content-Type: application/json
+
+{}
+
+### Harga / stok salah (400)
+POST {{base}}/products
+Content-Type: application/json
+
+{"sku":"BKT-F1D02410080-BAD","name":"Buket Demo","category":"Wisuda","price":-10,"stock":-2}
+
+### Edit: ganti id dengan id produk live (200)
+PUT {{base}}/products/{{id}}
+Content-Type: application/json
+
+{"sku":"BKT-F1D02410080-LIVE","name":"Buket Revisi Muhammad Rifqy Habibi","category":"Wisuda","description":"Revisi demo","price":180000,"stock":10}
+
+### Pesanan dengan produk seed id 1 (201 jika id sesuai; cek dahulu GET detail)
+POST {{base}}/orders
+Content-Type: application/json
+
+{"productId":1,"customerName":"Pelanggan Demo F1D02410080","quantity":2}
+
+### Stok tidak cukup (409; jangan ada order baru)
+POST {{base}}/orders
+Content-Type: application/json
+
+{"productId":1,"customerName":"Pelanggan Demo F1D02410080","quantity":999999}
+
+### Relasi include (200)
+GET {{base}}/orders
+
+### Produk tak ada (404)
+GET {{base}}/products/999999
+
+### Hapus produk tanpa order (204, body kosong); ganti id produk live
+DELETE {{base}}/products/{{id}}
+
+### Hapus produk dengan order (409); gunakan id yang memang punya order
+DELETE {{base}}/products/1

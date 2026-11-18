@@ -1,0 +1,23 @@
+{
+  "info": {
+    "name": "Bouquet Products ETS — Muhammad Rifqy Habibi F1D02410080",
+    "description": "Impor ke Postman; atur baseUrl dan productId sesuai database lokal. Request POST valid harus dikirim sekali lalu diulang untuk 409.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "productId", "value": "1" }
+  ],
+  "item": [
+    { "name": "01 GET products 200 / pagination + filter", "request": { "method": "GET", "url": "{{baseUrl}}/products?halaman=1&ukuran=5&category=Wisuda" } },
+    { "name": "02 GET detail 200", "request": { "method": "GET", "url": "{{baseUrl}}/products/{{productId}}" } },
+    { "name": "03 POST product 201; ulang = 409", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"sku\":\"BKT-F1D02410080-POSTMAN\",\"name\":\"Buket Demo Muhammad Rifqy Habibi\",\"category\":\"Wisuda\",\"description\":\"ETS F1D02410080\",\"price\":179000,\"stock\":10}" }, "url": "{{baseUrl}}/products" } },
+    { "name": "04 POST invalid 400", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{}" }, "url": "{{baseUrl}}/products" } },
+    { "name": "05 GET not found 404", "request": { "method": "GET", "url": "{{baseUrl}}/products/999999" } },
+    { "name": "06 PUT product 200 (pilih id produk demo tanpa order)", "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"sku\":\"BKT-F1D02410080-POSTMAN\",\"name\":\"Buket Revisi Muhammad Rifqy Habibi\",\"category\":\"Wisuda\",\"price\":180000,\"stock\":10}" }, "url": "{{baseUrl}}/products/{{productId}}" } },
+    { "name": "07 POST order 201", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"productId\":1,\"customerName\":\"Pelanggan Demo F1D02410080\",\"quantity\":2}" }, "url": "{{baseUrl}}/orders" } },
+    { "name": "08 POST order stok kurang 409", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"productId\":1,\"customerName\":\"Pelanggan Demo F1D02410080\",\"quantity\":999999}" }, "url": "{{baseUrl}}/orders" } },
+    { "name": "09 GET orders + product 200", "request": { "method": "GET", "url": "{{baseUrl}}/orders" } },
+    { "name": "10 DELETE product 204 / 409 jika ada order", "request": { "method": "DELETE", "url": "{{baseUrl}}/products/{{productId}}" } }
+  ]
+}
