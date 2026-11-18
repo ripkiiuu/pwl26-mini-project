@@ -23,6 +23,11 @@ test('POST produk kosong ditolak 400', async () => {
   assert.equal(status, 400);
   assert.equal(body.error.kode, 'VALIDATION_ERROR');
 });
+test('POST tanpa JSON/body ditolak 400, bukan error Prisma 500', async () => {
+  const response = await fetch(`${base}/products`, { method: 'POST' });
+  assert.equal(response.status, 400);
+  assert.equal((await response.json()).error.kode, 'VALIDATION_ERROR');
+});
 test('harga negatif dan stok negatif ditolak', async () => {
   const [status] = await request('/products', 'POST', {
     sku: 'X', name: 'Buket', category: 'Wisuda', price: -1, stock: -2,
