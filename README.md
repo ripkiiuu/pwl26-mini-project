@@ -104,4 +104,4 @@ Kode dan screenshot asli mahasiswa diunggah ke repo Public [ripkiiuu/pwl26-mini-
 
 ### Deklarasi penggunaan AI
 
-Saya menggunakan OpenCode/AI untuk membantu merancang struktur proyek, memahami konsep, menulis dan meninjau kode, menyiapkan skenario uji, dan menyusun dokumentasi. Saya wajib meninjau, menjalankan, menguji, melatih penjelasan, serta memastikan seluruh hasil dan video live coding benar-benar saya pahami dan kerjakan sendiri. Bagian yang belum saya uji tidak saya klaim sudah berhasil.
+Saya menggunakan OpenCode/AI untuk membantu perancangan, penulisan dan peninjauan kode, pengujian, serta dokumentasi. Saya meninjau dan menguji hasilnya, lalu menjelaskan dan melakukan live coding sendiri dalam video.
