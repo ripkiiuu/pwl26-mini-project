@@ -90,7 +90,7 @@ Joi memeriksa **bentuk** input (required, string kosong, tipe, rentang, ID, hala
 
 ## Video dan pengumpulan
 
-Video: **[ISI URL YouTube Unlisted / Google Drive dengan akses siapa saja yang punya tautan setelah merekam]**. Panduan: [`docs/PANDUAN_LIVE_CODING_POST.md`](docs/PANDUAN_LIVE_CODING_POST.md) dan [`docs/SCRIPT_VIDEO_ETS.md`](docs/SCRIPT_VIDEO_ETS.md).
+Video: **[ISI URL YouTube Unlisted / Google Drive dengan akses siapa saja yang punya tautan setelah merekam]**. Panduan: [`docs/PANDUAN_REKAMAN_LENGKAP.md`](docs/PANDUAN_REKAMAN_LENGKAP.md), [`docs/PANDUAN_LIVE_CODING_POST.md`](docs/PANDUAN_LIVE_CODING_POST.md), dan [`docs/SCRIPT_VIDEO_ETS.md`](docs/SCRIPT_VIDEO_ETS.md).
 
 - [x] MySQL tugas lokal berjalan; migrasi, seed dua kali, tes API otomatis dan rollback dijalankan OpenCode.
 - [x] Mahasiswa menjalankan tes Postman dan memeriksa tabel di phpMyAdmin; hasilnya disimpan sebagai screenshot asli.
